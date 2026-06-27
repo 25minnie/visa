@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>申根签证决策导航 · 春秋旅游签证部</title>
+<style>
+  :root{
+    --paper:#F6F3EC; --paper2:#FBF9F4; --ink:#16233F; --ink2:#46506A;
+    --eu:#11409E; --eu-d:#0C2E72; --gold:#C7A24A; --gold-d:#9E7E2E;
+    --alert:#B23A2E; --alert-bg:#FBEDEA; --ok:#2E7A57; --ok-bg:#E9F3ED;
+    --line:#DAD3C4; --shadow:0 1px 2px rgba(22,35,63,.06),0 8px 24px rgba(22,35,63,.07);
+    --mono:ui-monospace,"SFMono-Regular","Cascadia Code","Consolas",monospace;
+    --sans:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,"Segoe UI",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+    line-height:1.7;-webkit-font-smoothing:antialiased;font-size:15px}
+  h1,h2,h3{line-height:1.25;margin:0;font-weight:800;letter-spacing:-.01em}
+  a{color:var(--eu)}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 22px}
+
+  /* ---- document header strip ---- */
+  .doc-strip{background:var(--eu);color:#fff;position:relative;overflow:hidden}
+  .doc-strip::after{content:"";position:absolute;inset:0;opacity:.16;
+    background:repeating-linear-gradient(115deg,transparent 0 9px,rgba(255,255,255,.5) 9px 10px),
+               repeating-linear-gradient(-25deg,transparent 0 14px,rgba(255,255,255,.3) 14px 15px);}
+  .doc-strip .wrap{position:relative;display:flex;align-items:center;justify-content:space-between;
+    padding-top:11px;padding-bottom:11px;gap:14px}
+  .crest{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.02em}
+  .stars{display:grid;grid-template-columns:repeat(4,6px);grid-auto-rows:6px;gap:3px}
+  .stars i{width:6px;height:6px;background:var(--gold);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+  .doc-strip small{font-family:var(--mono);opacity:.85;font-size:11px;letter-spacing:.06em}
+
+  /* ---- hero ---- */
+  .hero{background:linear-gradient(180deg,var(--paper2),var(--paper));border-bottom:1px solid var(--line)}
+  .hero .wrap{padding:46px 22px 40px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;color:var(--gold-d);
+    text-transform:uppercase;margin-bottom:14px}
+  .hero h1{font-size:clamp(30px,5vw,48px)}
+  .hero h1 .blue{color:var(--eu)}
+  .hero p.lead{font-size:17px;color:var(--ink2);max-width:640px;margin:16px 0 0}
+  .stat-row{display:flex;flex-wrap:wrap;gap:26px;margin-top:30px}
+  .stat b{display:block;font-size:26px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+  .stat span{font-size:12.5px;color:var(--ink2)}
+  .stat b em{font-style:normal;font-size:15px;color:var(--ink2);font-weight:600}
+
+  /* ---- nav ---- */
+  nav.tabs{position:sticky;top:0;z-index:30;background:rgba(246,243,236,.92);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;padding:0 16px}
+  .tab{appearance:none;border:0;background:none;font-family:var(--sans);font-size:14.5px;
+    font-weight:700;color:var(--ink2);padding:15px 16px;cursor:pointer;white-space:nowrap;
+    border-bottom:2.5px solid transparent;transition:color .15s}
+  .tab .n{font-family:var(--mono);font-size:11px;color:var(--gold-d);margin-right:7px}
+  .tab:hover{color:var(--ink)}
+  .tab[aria-selected="true"]{color:var(--eu);border-bottom-color:var(--eu)}
+
+  section.panel{display:none;padding:42px 0 56px}
+  section.panel.on{display:block;animation:fade .35s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .panel h2{font-size:24px;margin-bottom:6px}
+  .panel h2 .n{font-family:var(--mono);font-size:14px;color:var(--gold-d);margin-right:10px}
+  .panel .sub{color:var(--ink2);margin:0 0 26px;max-width:680px}
+
+  /* ---- cards / generic ---- */
+  .card{background:var(--paper2);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:760px){.g2,.g3{grid-template-columns:1fr}}
+
+  /* ---- knowledge ---- */
+  .rule{padding:20px}
+  .rule .tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+    padding:3px 9px;border-radius:999px;background:var(--alert-bg);color:var(--alert);
+    font-weight:700;margin-bottom:10px}
+  .rule h3{font-size:16px;margin-bottom:8px}
+  .rule p{margin:0;color:var(--ink2);font-size:14px}
+  .kchips{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 28px}
+  .chip{background:var(--paper2);border:1px solid var(--line);border-radius:999px;
+    padding:8px 15px;font-size:13.5px;font-weight:600}
+  .chip b{color:var(--eu)}
+  .typebox{padding:18px 20px}
+  .typebox h3{font-size:15px;display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .typebox .dot{width:9px;height:9px;border-radius:50%;background:var(--eu)}
+  .typebox p{margin:0;font-size:13.5px;color:var(--ink2)}
+
+  /* ---- form ---- */
+  .q{margin-bottom:22px}
+  .q>label{display:block;font-weight:700;font-size:14px;margin-bottom:9px}
+  .q small{display:block;color:var(--ink2);font-size:12px;margin-top:6px}
+  .opts{display:flex;flex-wrap:wrap;gap:9px}
+  .opt{position:relative}
+  .opt input{position:absolute;opacity:0;inset:0;cursor:pointer}
+  .opt span{display:block;padding:9px 15px;border:1.5px solid var(--line);border-radius:9px;
+    font-size:13.5px;font-weight:600;background:var(--paper2);cursor:pointer;transition:all .12s}
+  .opt input:checked+span{border-color:var(--eu);background:#EAF0FB;color:var(--eu-d);box-shadow:inset 0 0 0 1px var(--eu)}
+  .opt input:focus-visible+span{outline:2px solid var(--gold);outline-offset:2px}
+  .sel{width:100%;padding:11px 14px;border:1.5px solid var(--line);border-radius:9px;
+    font-family:var(--sans);font-size:14px;background:var(--paper2);color:var(--ink);cursor:pointer}
+  .slider-wrap{display:flex;align-items:center;gap:14px}
+  .slider-wrap input[type=range]{flex:1;accent-color:var(--eu)}
+  .slider-val{font-family:var(--mono);font-weight:800;color:var(--eu);min-width:26px;text-align:center}
+  .btn{appearance:none;border:0;border-radius:10px;font-family:var(--sans);font-weight:800;
+    font-size:15px;padding:13px 26px;cursor:pointer;background:var(--eu);color:#fff;
+    box-shadow:var(--shadow);transition:transform .08s,background .15s}
+  .btn:hover{background:var(--eu-d)}
+  .btn:active{transform:translateY(1px)}
+  .btn.ghost{background:transparent;color:var(--eu);border:1.5px solid var(--eu);box-shadow:none}
+  .btn.sm{padding:8px 16px;font-size:13.5px}
+  .btnbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 22px}
+
+  /* ---- result country cards ---- */
+  #matchOut{margin-top:30px}
+  .notice{padding:14px 18px;border-radius:10px;font-size:13.5px;margin-bottom:18px;border:1px solid}
+  .notice.blue{background:#EAF0FB;border-color:#C2D2F0;color:var(--eu-d)}
+  .notice.red{background:var(--alert-bg);border-color:#E8C3BD;color:var(--alert)}
+  .notice.orange{background:#F6EFD9;border-color:#DCC17A;color:#7A5A10}
+  .notice b{font-weight:800}
+  .ccard{border-left:5px solid var(--c);padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+  .ccard .top{display:flex;align-items:center;gap:11px}
+  .ccard .flag{font-size:28px;line-height:1}
+  .ccard .name{font-weight:800;font-size:17px}
+  .ccard .en{font-family:var(--mono);font-size:11px;color:var(--ink2);letter-spacing:.05em}
+  .ccard .tierbadge{margin-left:auto;font-size:11.5px;font-weight:800;padding:4px 10px;
+    border-radius:999px;background:var(--cbg);color:var(--c)}
+  .ccard .cvi{font-family:var(--mono);font-weight:800;font-size:13px;color:var(--ink)}
+  .metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .metric{font-size:12px;color:var(--ink2)}
+  .metric b{display:block;font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:800}
+  .bar{height:5px;border-radius:3px;background:var(--line);margin-top:5px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--c)}
+  .ccard .why{font-size:13px;color:var(--ink2);margin:0;border-top:1px dashed var(--line);padding-top:11px}
+  .rank{font-family:var(--mono);font-size:11px;color:var(--gold-d);font-weight:700}
+  .pass-row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2);margin-top:4px}
+  .pass-bar{flex:1;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+  .pass-bar i{display:block;height:100%;background:var(--c);border-radius:4px}
+
+  /* ---- similar customers / analysis ---- */
+  .simi{display:flex;align-items:center;gap:14px;padding:16px 18px;background:#EAF0FB;border-radius:12px;margin:26px 0 18px}
+  .avatars{display:flex}
+  .avatar{width:38px;height:38px;border-radius:50%;background:var(--eu);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;border:3px solid var(--paper2);margin-left:-10px;font-size:13px}
+  .avatar:first-child{margin-left:0}
+  .simi-text{flex:1}
+  .simi-text b{font-size:17px;color:var(--eu)}
+  .simi-text span{display:block;font-size:12.5px;color:var(--ink2)}
+
+  /* ---- comparison table ---- */
+  .table-wrap{overflow-x:auto;margin:22px 0 10px}
+  .comp{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
+  .comp th,.comp td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:center}
+  .comp th{background:#EAF0FB;color:var(--eu-d);font-weight:700;font-size:12px}
+  .comp td:first-child,.comp th:first-child{text-align:left;font-weight:700}
+  .comp tr:hover{background:rgba(199,162,74,.05)}
+  .tag-sm{display:inline-block;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:700}
+  .tag-green{background:#E9F3ED;color:#2E7A57}
+  .tag-blue{background:#EAF0FB;color:#11409E}
+  .tag-orange{background:#F6EFD9;color:#9E7E2E}
+  .tag-red{background:#FBEDEA;color:#B23A2E}
+
+  /* ---- action buttons ---- */
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+
+  /* ---- simulator ---- */
+  .legrow{display:grid;grid-template-columns:24px 1fr 92px 64px 30px;gap:10px;align-items:center;margin-bottom:10px}
+  .legrow select,.legrow input{font-family:var(--sans);font-size:14px;padding:9px 10px;
+    border:1.5px solid var(--line);border-radius:8px;background:var(--paper2);width:100%}
+  .legrow .ix{font-family:var(--mono);color:var(--ink2);text-align:center;font-size:12px}
+  .legrow .first{display:flex;align-items:center;justify-content:center}
+  .legrow .del{appearance:none;border:0;background:none;color:var(--alert);font-size:18px;cursor:pointer;font-weight:700}
+  .legrow .first label{font-size:11px;color:var(--ink2);display:flex;flex-direction:column;align-items:center;cursor:pointer;gap:2px}
+  .simhead{display:grid;grid-template-columns:24px 1fr 92px 64px 30px;gap:10px;
+    font-size:11px;color:var(--ink2);font-weight:700;margin-bottom:8px;padding:0 2px}
+  /* stamp result */
+  .stamp-wrap{margin-top:26px;min-height:10px}
+  .stamp{display:inline-block;border:3px double var(--st);color:var(--st);border-radius:10px;
+    padding:14px 22px;transform:rotate(-4deg);font-family:var(--mono);position:relative;
+    background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.015) 3px 4px);
+    animation:press .4s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes press{0%{transform:rotate(-4deg) scale(1.5);opacity:0}60%{opacity:1}100%{transform:rotate(-4deg) scale(1)}}
+  .stamp .l1{font-size:10px;letter-spacing:.28em;text-align:center;opacity:.8}
+  .stamp .l2{font-size:26px;font-weight:800;text-align:center;letter-spacing:.04em;margin:3px 0}
+  .stamp .l3{font-size:10.5px;letter-spacing:.12em;text-align:center;opacity:.9}
+
+  /* ---- docs ---- */
+  .dl{list-style:none;padding:0;margin:0}
+  .dl li{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+  .dl li:last-child{border-bottom:0}
+  .dl input{margin-top:4px;width:17px;height:17px;accent-color:var(--eu);flex:none}
+  .dl .t{font-weight:700;font-size:14px}
+  .dl .d{font-size:12.5px;color:var(--ink2)}
+  .dl .must{font-family:var(--mono);font-size:10px;color:var(--alert);border:1px solid #E8C3BD;
+    border-radius:4px;padding:1px 5px;margin-left:7px;font-weight:700;white-space:nowrap}
+  .docbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 22px}
+
+  footer{background:var(--ink);color:#C7CEDC;padding:30px 0 22px;font-size:13px}
+  footer .src{max-width:780px;margin:0 0 18px;color:#9AA4B8;font-size:12.5px;line-height:1.7}
+  .mrz{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:#7E889E;
+    border-top:1px solid #2A3957;border-bottom:1px solid #2A3957;padding:11px 0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:14px 0}
+  footer .disc{color:#7E889E;font-size:11.5px}
+
+  @media print{nav.tabs,.hero,.doc-strip,footer .mrz{display:none}
+    section.panel{display:block!important;page-break-inside:avoid}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="doc-strip">
+  <div class="wrap">
+    <div class="crest">
+      <span class="stars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      申根签证决策导航
+    </div>
+    <small>SCHENGEN&nbsp;VISA&nbsp;DECISION&nbsp;ENGINE&nbsp;·&nbsp;v2.0</small>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">一签在手 · 畅行 29 国</div>
+    <h1>选对申请国，<span class="blue">才走得了。</span></h1>
+    <p class="lead">申根签证不是“哪个好签办哪个”。申请国由你的<strong>出行目的</strong>和<strong>最长停留国</strong>决定。
+      用下面的工具找到合规且最优的国家，并按目的备齐材料——把拒签和入境遣返的风险，挡在递交之前。</p>
+    <div class="stat-row">
+      <div class="stat"><b>29<em> 国</em></b><span>申根区成员，一签通行</span></div>
+      <div class="stat"><b>99.4<em>%</em></b><span>内部 330 例实战通过率</span></div>
+      <div class="stat"><b>4.0<em>%</em></b><span>2024 中国申请人拒签率（历史低点）</span></div>
+      <div class="stat"><b>3<em> 秒</em></b><span>生成国家优选与排雷建议</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap">
+    <button class="tab" role="tab" aria-selected="true" data-tab="know"><span class="n">01</span>签证常识</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="match"><span class="n">02</span>国家智能匹配</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="sim"><span class="n">03</span>行程合规模拟器</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="docs"><span class="n">04</span>材料清单</button>
+  </div>
+</nav>
+
+<!-- ============ 01 KNOWLEDGE ============ -->
+<section class="panel on" id="know">
+  <div class="wrap">
+    <h2><span class="n">01</span>先弄懂规则，再谈选国</h2>
+    <p class="sub">申根签证背后是《申根签证法典》。下面三条是最常被忽视、也最容易导致拒签或入境被拦的红线。</p>
+
+    <div class="grid g3" style="margin-bottom:30px">
+      <div class="card rule"><span class="tag">红线 · 商务</span>
+        <h3>邀请方属地原则</h3>
+        <p>商务签必须首选<strong>邀请公司所在国</strong>。若实际会议／展会地点与邀请国不一致，需在邀请函中写明会议地址、事由及凭证（子公司证明、展会场地、当地酒店合同等），否则极易被拒。</p></div>
+      <div class="card rule"><span class="tag">红线 · 探亲</span>
+        <h3>官方接待证明</h3>
+        <p>探亲访友除关系证明外，须由邀请人前往当地<strong>市政厅开具官方接待证明</strong>。此项为“一票否决”——未取得前不建议递交。</p></div>
+      <div class="card rule"><span class="tag">红线 · 旅游</span>
+        <h3>最长停留国原则</h3>
+        <p>旅游签须向行程中<strong>停留时间最长</strong>的成员国申请；若多国停留天数相同，则向<strong>首次入境国</strong>申请。但停留天数相同存在被领馆质疑“行程真实性”的风险，<strong>建议尽量安排一个明确的最长停留国</strong>。从哪国入境≠向哪国申请。</p></div>
+    </div>
+
+    <h3 style="font-size:16px;margin-bottom:12px">一签通行的 29 国</h3>
+    <div class="kchips" id="chipCountries"></div>
+
+    <h3 style="font-size:16px;margin:6px 0 12px">短期签证（C 类）常见类型</h3>
+    <div class="grid g3">
+      <div class="card typebox"><h3><span class="dot"></span>旅游</h3><p>以观光为目的。申请国受“最长停留国”约束，材料侧重行程与资金。</p></div>
+      <div class="card typebox"><h3><span class="dot"></span>探亲 / 访友</h3><p>探访亲属或朋友。须由邀请人所在国申请，部分国家要求官方接待证明。</p></div>
+      <div class="card typebox"><h3><span class="dot"></span>商务 / 文化交流</h3><p>会议、考察、参展、文化交流等。受“邀请方属地”约束，需完整邀请函。</p></div>
+    </div>
+    <p style="font-size:13px;color:var(--ink2);margin-top:14px"><b>注意：</b>单次入境（Single）或多次入境（MEV）只是签证的入境次数属性，是否签发多次往返由领馆根据申请人资质与历史记录决定。</p>
+  </div>
+</section>
+
+<!-- ============ 02 MATCH ============ -->
+<section class="panel" id="match">
+  <div class="wrap">
+    <h2><span class="n">02</span>告诉我你的情况，我来排序</h2>
+    <p class="sub">基于欧盟官方统计、春秋内部 330 例实战数据与您的画像，综合评估国家竞争力（CVI）、匹配度与风险。结果为参考优选，最终须结合领区与真实行程确认。</p>
+
+    <div class="card" style="padding:24px">
+      <div class="grid g2">
+        <div class="q"><label>① 年龄</label>
+          <select class="sel" id="age">
+            <option value="">请选择</option>
+            <option value="25" selected>25 岁以下</option>
+            <option value="30">25–30 岁</option>
+            <option value="40">30–40 岁</option>
+            <option value="50">40–50 岁</option>
+            <option value="60">50 岁以上</option>
+          </select>
+        </div>
+        <div class="q"><label>② 职业类型</label>
+          <select class="sel" id="occupation">
+            <option value="">请选择</option>
+            <option value="employee" selected>企业职员</option>
+            <option value="teacher">教师 / 医生 / 公务员</option>
+            <option value="executive">企业高管</option>
+            <option value="freelance">自由职业</option>
+            <option value="student">学生</option>
+            <option value="retired">退休</option>
+            <option value="unemployed">无业</option>
+          </select>
+        </div>
+        <div class="q"><label>③ 婚姻状况</label>
+          <select class="sel" id="marital">
+            <option value="">请选择</option>
+            <option value="married" selected>已婚</option>
+            <option value="single">未婚</option>
+            <option value="divorced">离异</option>
+          </select>
+        </div>
+        <div class="q"><label>④ 性别</label>
+          <select class="sel" id="gender">
+            <option value="">请选择</option>
+            <option value="male" selected>男</option>
+            <option value="female">女</option>
+          </select>
+        </div>
+        <div class="q"><label>⑤ 总资产（存款 + 理财）</label>
+          <select class="sel" id="assets">
+            <option value="">请选择</option>
+            <option value="5">5 万以下</option>
+            <option value="10" selected>5–10 万</option>
+            <option value="30">10–30 万</option>
+            <option value="50">30–50 万</option>
+            <option value="100">50 万以上</option>
+          </select>
+        </div>
+        <div class="q"><label>⑥ 年收入（税前）</label>
+          <select class="sel" id="income">
+            <option value="">请选择</option>
+            <option value="5">10 万以下</option>
+            <option value="10" selected>10–20 万</option>
+            <option value="20">20–50 万</option>
+            <option value="50">50 万以上</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="q"><label>⑦ 出行目的</label>
+        <div class="opts" data-q="purpose">
+          <label class="opt"><input type="radio" name="purpose" value="tour" checked><span>旅游观光</span></label>
+          <label class="opt"><input type="radio" name="purpose" value="biz"><span>商务 / 会展</span></label>
+          <label class="opt"><input type="radio" name="purpose" value="visit"><span>探亲访友</span></label>
+        </div>
+      </div>
+
+      <div class="q"><label>⑧ 近 10 年出境记录</label>
+        <div class="opts" data-q="record">
+          <label class="opt"><input type="radio" name="record" value="blank" checked><span>白本 / 仅东南亚</span></label>
+          <label class="opt"><input type="radio" name="record" value="ok"><span>良好（1 次申根或发达国家）</span></label>
+          <label class="opt"><input type="radio" name="record" value="good"><span>优秀（2 次以上）</span></label>
+          <label class="opt"><input type="radio" name="record" value="best"><span>非常优秀（3 年内多次）</span></label>
+        </div>
+      </div>
+
+      <div class="q"><label>⑨ 计划出行时间</label>
+        <div class="opts" data-q="departure">
+          <label class="opt"><input type="radio" name="departure" value="urgent"><span>1 个月内（紧急）</span></label>
+          <label class="opt"><input type="radio" name="departure" value="normal" checked><span>1–3 个月</span></label>
+          <label class="opt"><input type="radio" name="departure" value="later"><span>3 个月后</span></label>
+        </div>
+      </div>
+
+      <div class="q"><label>⑩ 最看重什么</label>
+        <div class="opts" data-q="need">
+          <label class="opt"><input type="radio" name="need" value="safe" checked><span>求稳（高通过率）</span></label>
+          <label class="opt"><input type="radio" name="need" value="fast"><span>求快（出签时效）</span></label>
+          <label class="opt"><input type="radio" name="need" value="multi"><span>求多次往返（MEV）</span></label>
+          <label class="opt"><input type="radio" name="need" value="easy"><span>求省心（材料宽容）</span></label>
+        </div>
+      </div>
+
+      <div class="q"><label>⑪ 是否有偏好国家（可选）</label>
+        <select class="sel" id="preferred">
+          <option value="">无特定偏好，听推荐</option>
+          <option value="法国">🇫🇷 法国</option>
+          <option value="西班牙">🇪🇸 西班牙</option>
+          <option value="意大利">🇮🇹 意大利</option>
+          <option value="德国">🇩🇪 德国</option>
+          <option value="荷兰">🇳🇱 荷兰</option>
+          <option value="冰岛">🇮🇸 冰岛</option>
+          <option value="奥地利">🇦🇹 奥地利</option>
+          <option value="匈牙利">🇭🇺 匈牙利</option>
+          <option value="希腊">🇬🇷 希腊</option>
+          <option value="捷克">🇨🇿 捷克</option>
+        </select>
+        <small>若勾选偏好国家，系统会在排序中适度加权，但仍会提示风险。</small>
+      </div>
+
+      <div class="q" style="margin-bottom:18px"><label>⑫ 人群标记（可选，多选）</label>
+        <div class="opts" data-q="flags">
+          <label class="opt"><input type="checkbox" name="flag" value="senior"><span>退休 / 老年</span></label>
+          <label class="opt"><input type="checkbox" name="flag" value="family"><span>家庭亲子</span></label>
+          <label class="opt"><input type="checkbox" name="flag" value="risk"><span>单身 / 无业 / 低收入</span></label>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" id="matchBtn">生成国家优选</button>
+        <button class="btn ghost" id="resetBtn">↺ 重置画像</button>
+      </div>
+    </div>
+
+    <div id="matchOut"></div>
+  </div>
+</section>
+
+<!-- ============ 03 SIMULATOR ============ -->
+<section class="panel" id="sim">
+  <div class="wrap">
+    <h2><span class="n">03</span>行程合规模拟器</h2>
+    <p class="sub">输入你在各成员国的过夜天数，系统按“最长停留国 / 首入国”原则，自动锁定唯一合规的申请国。</p>
+
+    <div class="card" style="padding:22px">
+      <div class="simhead"><span></span><span>停留国家</span><span>过夜天数</span><span>首入国</span><span></span></div>
+      <div id="legRows"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
+        <button class="btn ghost sm" id="addLeg">+ 添加一段行程</button>
+        <button class="btn sm" id="simBtn">锁定申请国</button>
+      </div>
+      <div class="stamp-wrap" id="stampOut"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 DOCS ============ -->
+<section class="panel" id="docs">
+  <div class="wrap">
+    <h2><span class="n">04</span>材料清单</h2>
+    <p class="sub">按目的勾选准备进度。带“必备”标记的为关键项，缺失将显著提高拒签风险。最终清单以使领馆要求为准。</p>
+
+    <div class="docbar">
+      <div class="opts" data-q="dtype">
+        <label class="opt"><input type="radio" name="dtype" value="tour" checked><span>旅游</span></label>
+        <label class="opt"><input type="radio" name="dtype" value="biz"><span>商务</span></label>
+        <label class="opt"><input type="radio" name="dtype" value="visit"><span>探亲</span></label>
+      </div>
+      <span style="flex:1"></span>
+      <button class="btn ghost sm" id="printBtn">打印清单</button>
+    </div>
+
+    <div class="card" style="padding:8px 22px"><ul class="dl" id="docList"></ul></div>
+
+    <h3 style="font-size:16px;margin:30px 0 12px">未成年人补充材料</h3>
+    <div class="card" style="padding:8px 22px"><ul class="dl" id="minorDocList"></ul></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p class="src"><strong style="color:#E4E9F2">数据来源 ｜</strong>
+      内部实战：春秋旅游签证部 2026 年 1–6 月实际送签 330 例（17 个申根国，脱敏）。
+      官方统计：欧盟 DG HOME 2021–2025 年度申根签证统计报告（7,352 条领馆级明细）。
+      行业宏观：SchengenVisaInfo《2014–2024 中国申根签证趋势报告》。
+      通过率与时效综合官方与内部数据，各领区（北京／上海／广州等）存在差异。</p>
+    <div class="mrz">P&lt;CHN&lt;CHUNQIU&lt;VISA&lt;DECISION&lt;NAVIGATOR&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>SCHENGEN29&lt;&lt;2026&lt;&lt;ONE&lt;VISA&lt;TWENTYNINE&lt;COUNTRIES&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;0</div>
+    <p class="disc">本工具为辅助决策参考，不构成签证保证；最终申请国、材料与结果以各国使领馆要求及销售顾问确认为准。© 2026 春秋旅游 · 签证部</p>
+  </div>
+</footer>
+
+<script>
+/* ---------- data ---------- */
+const TIER={A:{label:"强烈推荐",c:"#2E7A57",bg:"#E9F3ED"},B:{label:"推荐",c:"#11409E",bg:"#EAF0FB"},
+            C:{label:"谨慎推荐",c:"#9E7E2E",bg:"#F6EFD9"},D:{label:"风险 · 需特别关注",c:"#B23A2E",bg:"#FBEDEA"}};
+const C=[
+ {zh:"法国",en:"FRANCE",flag:"🇫🇷",tier:"A",cvi:88,pass:84.2,daysMin:5,days:"5–8 天",mev:"高",tol:"高",note:"MEV 多次往返签发量全球第一；白本友好，综合首选推荐。但预约紧张，通常需约到一个半月以后，1 个月内出行基本无法递签。"},
+ {zh:"西班牙",en:"ESPANA",flag:"🇪🇸",tier:"A",cvi:86,pass:84.3,daysMin:5,days:"5–8 天",mev:"中",tol:"高",note:"材料容错率高、对老年与家庭友好，综合首选推荐；部分领区严查。"},
+ {zh:"荷兰",en:"NEDERLAND",flag:"🇳🇱",tier:"A",cvi:88,pass:96.7,daysMin:5,days:"5–7 天",mev:"中",tol:"高",note:"通过率 96.7%，签证体验最佳。"},
+ {zh:"瑞士",en:"SCHWEIZ",flag:"🇨🇭",tier:"A",cvi:85,pass:94.0,daysMin:5,days:"5–7 天",mev:"中",tol:"高",note:"出签稳定、材料容错率较高；预约相对宽松，适合 1 个月内紧急出行。"},
+ {zh:"德国",en:"DEUTSCHLAND",flag:"🇩🇪",tier:"A",cvi:87,pass:86.3,daysMin:3,days:"3–4 天",mev:"高",tol:"中",note:"处理高效、MEV 签发比例高，商务首选。"},
+ {zh:"奥地利",en:"OESTERREICH",flag:"🇦🇹",tier:"A",cvi:85,pass:86.3,daysMin:4,days:"4–6 天",mev:"中",tol:"中",note:"审查稳定，结果可预期。"},
+ {zh:"意大利",en:"ITALIA",flag:"🇮🇹",tier:"B",cvi:82,pass:89.1,daysMin:5,days:"5–7 天",mev:"低",tol:"中",green:true,note:"旅游友好；在职年收入 10 万以上且无明确目的地的优质客户可享“绿通”，通过率 99.99%，约 2–3 天出签。多次往返通常只批单次。"},
+ {zh:"冰岛",en:"ISLAND",flag:"🇮🇸",tier:"C",cvi:55,pass:98.1,daysMin:25,days:"10–45 天（不稳定）",mev:"中",tol:"高",note:"通过率高，但出签时效极不稳定，最长可能等待 45 天，不建议优先选择。"},
+ {zh:"匈牙利",en:"MAGYARORSZAG",flag:"🇭🇺",tier:"C",cvi:75,pass:87.3,daysMin:2,days:"2–3 天",mev:"中",tol:"中",airTicket:true,note:"出签速度极快，但机票需正式出票；若匈牙利不是主要目的地，不建议优先选择。"},
+ {zh:"希腊",en:"HELLAS",flag:"🇬🇷",tier:"D",cvi:50,pass:86.8,daysMin:5,days:"5–7 天",mev:"低",tol:"中",risk:true,note:"单身女性单独出行易被拒签；建议希腊一地行程，避免与其他国家混签。"},
+ {zh:"捷克",en:"CESKO",flag:"🇨🇿",tier:"C",cvi:58,pass:84.3,daysMin:6,days:"6–8 天",mev:"低",tol:"中",note:"适合特定线路。"},
+ {zh:"比利时",en:"BELGIQUE",flag:"🇧🇪",tier:"D",cvi:45,pass:75.4,daysMin:7,days:"7–10 天",mev:"低",tol:"低",risk:true,note:"拒签率约 24.6%，对资产要求高。"},
+ {zh:"瑞典",en:"SVERIGE",flag:"🇸🇪",tier:"D",cvi:42,pass:76.0,daysMin:7,days:"7–10 天",mev:"低",tol:"低",risk:true,note:"旅游签审查严格，拒签风险较高，不建议优先选择。"},
+ {zh:"斯洛文尼亚",en:"SLOVENIJA",flag:"🇸🇮",tier:"D",cvi:42,pass:75.5,daysMin:7,days:"7–9 天",mev:"低",tol:"低",risk:true,note:"小众国家样本少，不确定性高。"},
+ {zh:"马耳他",en:"MALTA",flag:"🇲🇹",tier:"D",cvi:38,pass:61.5,daysMin:8,days:"8–12 天",mev:"低",tol:"低",risk:true,note:"拒签率高达 38.5%，材料审核极其严苛。"},
+];
+const friendly=new Set(["法国","西班牙","意大利"]);
+const topPref=new Set(["法国","西班牙"]);
+
+
+/* ---------- tabs ---------- */
+const tabs=[...document.querySelectorAll(".tab")];
+function show(id){
+  tabs.forEach(t=>t.setAttribute("aria-selected",t.dataset.tab===id));
+  document.querySelectorAll("section.panel").forEach(s=>s.classList.toggle("on",s.id===id));
+}
+tabs.forEach(t=>t.addEventListener("click",()=>show(t.dataset.tab)));
+
+/* ---------- knowledge chips ---------- */
+const ALL29=[
+  {zh:"德国",flag:"🇩🇪"},{zh:"法国",flag:"🇫🇷"},{zh:"意大利",flag:"🇮🇹"},{zh:"西班牙",flag:"🇪🇸"},
+  {zh:"葡萄牙",flag:"🇵🇹"},{zh:"荷兰",flag:"🇳🇱"},{zh:"比利时",flag:"🇧🇪"},{zh:"卢森堡",flag:"🇱🇺"},
+  {zh:"奥地利",flag:"🇦🇹"},{zh:"希腊",flag:"🇬🇷"},{zh:"丹麦",flag:"🇩🇰"},{zh:"芬兰",flag:"🇫🇮"},
+  {zh:"瑞典",flag:"🇸🇪"},{zh:"波兰",flag:"🇵🇱"},{zh:"捷克",flag:"🇨🇿"},{zh:"斯洛伐克",flag:"🇸🇰"},
+  {zh:"匈牙利",flag:"🇭🇺"},{zh:"斯洛文尼亚",flag:"🇸🇮"},{zh:"爱沙尼亚",flag:"🇪🇪"},{zh:"拉脱维亚",flag:"🇱🇻"},
+  {zh:"立陶宛",flag:"🇱🇹"},{zh:"马耳他",flag:"🇲🇹"},{zh:"克罗地亚",flag:"🇭🇷"},{zh:"保加利亚",flag:"🇧🇬"},
+  {zh:"罗马尼亚",flag:"🇷🇴"},{zh:"瑞士",flag:"🇨🇭"},{zh:"挪威",flag:"🇳🇴"},{zh:"冰岛",flag:"🇮🇸"},
+  {zh:"列支敦士登",flag:"🇱🇮"}
+];
+document.getElementById("chipCountries").innerHTML=
+  ALL29.map(x=>`<span class="chip">${x.flag} ${x.zh}</span>`).join("");
+
+/* ---------- helpers ---------- */
+const val=n=>document.querySelector(`input[name="${n}"]:checked`)?.value;
+const flags=()=>[...document.querySelectorAll('input[name="flag"]:checked')].map(x=>x.value);
+const sel=id=>document.getElementById(id).value;
+
+/* ---------- matcher ---------- */
+function scoreCountry(c){
+  const purpose=val("purpose"), record=val("record"), need=val("need"), fl=flags();
+  const age=parseInt(sel("age")||"30"), assets=parseInt(sel("assets")||"10"), income=parseInt(sel("income")||"10"), departure=val("departure");
+  const occupation=sel("occupation"), marital=sel("marital"), gender=sel("gender"), preferred=sel("preferred");
+  let s=c.cvi;
+
+  // 核心需求权重
+  if(need==="safe") s+=(c.pass-80)*1.3;
+  if(need==="fast") s+=(8-c.daysMin)*4;
+  if(need==="multi") s+={高:14,中:4,低:-8}[c.mev];
+  if(need==="easy") s+={高:12,中:3,低:-9}[c.tol];
+
+  // 出境记录
+  if(record==="blank"){ if(c.risk)s-=22; if(friendly.has(c.zh))s+=7; }
+  if(record==="ok" && c.risk)s-=10;
+  if(record==="best" && c.mev==="高")s+=5;
+
+  // 人群画像
+  if(fl.includes("senior")||fl.includes("family")){ if(c.tol==="高")s+=9; if(c.daysMin>=7)s-=4; }
+  if(fl.includes("risk")){ if(c.risk)s-=60; s+=(c.pass-80)*1.2; }
+
+  // 职业稳定性
+  const stable=new Set(["employee","teacher","executive"]);
+  if(stable.has(occupation)){ if(c.pass>=85)s+=3; }
+  if(occupation==="freelance"||occupation==="unemployed"){ if(c.tol==="高")s+=4; if(c.risk)s-=12; }
+  if(occupation==="student" && c.tol==="高")s+=5;
+  if(occupation==="retired" && c.tol==="高")s+=6;
+
+  // 资产
+  if(assets>=50){ if(c.pass>=85)s+=4; if(c.mev==="高")s+=3; }
+  if(assets<10 && c.risk)s-=10;
+
+  // 年龄
+  if((age===60 || fl.includes("senior")) && c.tol==="高")s+=4;
+  if(age===25 && c.risk)s-=5;
+
+  // 婚姻
+  if(marital==="married" && c.pass>=85)s+=2;
+  if(marital==="single" && c.risk)s-=6;
+
+  // 出行目的
+  if(purpose==="biz" && c.mev==="高")s+=8;
+  if(purpose==="visit" && c.tol==="高")s+=4;
+  if(purpose==="tour" && c.pass>=85)s+=2;
+
+  // 紧急程度
+  if(departure==="urgent") s+=(8-c.daysMin)*3;
+
+  // 1 个月内紧急出行：法国约不到号，推荐瑞士
+  if(departure==="urgent" && c.zh==="法国") s-=45;
+  if(departure==="urgent" && c.zh==="瑞士") s+=22;
+
+  // 偏好国家适度加权
+  if(preferred && c.zh===preferred) s+=12;
+
+  // 系统级优先推荐：法国、西班牙
+  if(topPref.has(c.zh)) s+=18;
+
+  // 特殊国家规则
+  if(c.zh==="冰岛") s-=30; // 通过率高但时效极不稳定，最长 45 天
+  if(c.zh==="匈牙利" && preferred!=="匈牙利") s-=30; // 机票需出票，非主要目的地不优先
+  if(c.zh==="瑞典" && purpose==="tour") s-=25; // 旅游签易被拒签
+  if(c.zh==="希腊" && gender==="female" && (marital==="single" || marital==="divorced")) s-=35; // 单身女性单独出行易拒签
+
+  // 意大利绿通：在职年收入 10 万以上且无明确目的地，优先推荐意大利绿通
+  if(c.zh==="意大利" && stable.has(occupation) && income>=10 && !preferred) s+=45;
+
+  return s;
+}
+
+function estimatePass(c){
+  const purpose=val("purpose"), record=val("record"), fl=flags(), occupation=sel("occupation"), assets=parseInt(sel("assets")||"10"), marital=sel("marital"), gender=sel("gender"), departure=val("departure");
+  let base=c.pass;
+  if(record==="blank") base-=6;
+  if(record==="good" || record==="best") base+=3;
+  if(occupation==="teacher" || occupation==="executive") base+=2;
+  if(occupation==="unemployed") base-=8;
+  if(assets>=50) base+=3;
+  if(assets<10) base-=5;
+  if(fl.includes("risk")) base-=7;
+  if(fl.includes("family")) base+=2;
+  if(c.zh==="冰岛") base-=5; // 时效不稳定，实际可控通过率下调
+  if(c.zh==="瑞典" && purpose==="tour") base-=12;
+  if(c.zh==="希腊" && gender==="female" && (marital==="single" || marital==="divorced")) base-=18;
+  if(c.zh==="法国" && departure==="urgent") base-=40; // 1 个月内基本约不到号
+  return Math.min(99,Math.max(40,Math.round(base)));
+}
+
+function badgeFor(c){
+  if(topPref.has(c.zh)) return {text:"🏆 首选推荐", cls:"tag-green"};
+  if(c.tier==="A") return {text:"⭐ 强烈推荐", cls:"tag-blue"};
+  if(c.daysMin<=3) return {text:"⚡ 快速出签", cls:"tag-blue"};
+  if(c.tier==="C") return {text:"⚠️ 谨慎选择", cls:"tag-orange"};
+  if(c.tier==="D") return {text:"🚫 不建议优先", cls:"tag-red"};
+  return {text:"⭐ 推荐", cls:"tag-blue"};
+}
+
+function similarCount(){
+  // 模拟相似客户数量，基于画像复杂度
+  const base=30, occupation=sel("occupation"), record=val("record"), purpose=val("purpose");
+  let n=base;
+  if(record==="blank") n-=8;
+  if(record==="best") n+=15;
+  if(occupation==="employee" || occupation==="teacher") n+=5;
+  if(purpose==="tour") n+=7;
+  return Math.max(12,Math.min(60,n+Math.floor(Math.random()*12)));
+}
+
+function renderMatch(){
+  const purpose=val("purpose"), record=val("record"), need=val("need"), fl=flags();
+  const preferred=sel("preferred"), occupation=sel("occupation"), departure=val("departure");
+  const out=document.getElementById("matchOut");
+  let notices="";
+
+  if(purpose==="biz") notices+=`<div class="notice red"><b>红线提醒｜商务签：</b>申请国由<b>邀请公司所在国</b>决定，下方排序仅为“材料齐全时的参考优选”。异地会议须补齐会议地址与凭证。</div>`;
+  if(purpose==="visit") notices+=`<div class="notice red"><b>红线提醒｜探亲签：</b>申请国为<b>邀请人所在国</b>，且须取得当地市政厅<b>官方接待证明</b>（一票否决）。下方仅供了解各国审核宽严。</div>`;
+  if(purpose==="tour") notices+=`<div class="notice blue"><b>提示｜旅游签：</b>最终申请国须由<b>最长停留国</b>决定。请在“行程合规模拟器”锁定后，再参考下方优选。</div>`;
+  if(fl.includes("risk")) notices+=`<div class="notice red"><b>高风险画像：</b>建议补充强约束力材料（稳定在职、资产、房产、家庭关系）或延期申请；已自动规避严查国。</div>`;
+  if(preferred && !fl.includes("risk")) notices+=`<div class="notice blue"><b>偏好提示：</b>您勾选了“${preferred}”，系统已将其适度前置，但合规与通过率仍优先。</div>`;
+
+  const scored=C.map(c=>{
+    const s=scoreCountry(c);
+    const est=estimatePass(c);
+    return {...c,score:s,estPass:est};
+  }).sort((a,b)=>b.score-a.score);
+
+  const top=scored.slice(0,3);
+  const avoid=scored.filter(c=>c.risk).sort((a,b)=>a.pass-b.pass).slice(0,3);
+  const sim=similarCount();
+
+  if(top.some(c=>c.zh==="冰岛")) notices+=`<div class="notice orange"><b>⚠️ 冰岛提醒：</b>冰岛虽通过率高，但出签时效极不稳定，最长可能等待 45 天，紧急出行请慎重。</div>`;
+  if(top.some(c=>c.zh==="匈牙利")) notices+=`<div class="notice orange"><b>⚠️ 匈牙利提醒：</b>匈牙利送签需机票正式出票，且最好以匈牙利为主要目的地；否则建议改选法国或西班牙。</div>`;
+  if(top.some(c=>c.zh==="瑞典")) notices+=`<div class="notice orange"><b>⚠️ 瑞典提醒：</b>瑞典旅游签审核严格，拒签风险较高，如无特殊原因不建议优先选择。</div>`;
+  if(top.some(c=>c.zh==="希腊")) notices+=`<div class="notice orange"><b>⚠️ 希腊提醒：</b>希腊对单身女性单独出行审核较严；如选择希腊，建议“希腊一地”行程，避免与其他国家混签。</div>`;
+  if(departure==="urgent" && (top.some(c=>c.zh==="法国") || preferred==="法国")) notices+=`<div class="notice orange"><b>⚠️ 法国预约提醒：</b>法国签证预约通常需约到一个半月以后，1 个月内出行基本无法递签。本次推荐已自动将法国后置，建议优先考虑瑞士、西班牙等可约国家。</div>`;
+
+  const card=(c,i)=>{
+    const T=TIER[c.tier];
+    const b=badgeFor(c);
+    const passBar=Math.min(100,Math.max(0,c.estPass));
+    return `<div class="card ccard" style="--c:${T.c};--cbg:${T.bg}">
+      <div class="top">
+        <span class="flag">${c.flag}</span>
+        <div><div class="name">${c.zh}${c.green?' · 绿通':''}</div><div class="en">${c.en}</div></div>
+        <span class="tierbadge">${T.label}</span>
+      </div>
+      <div class="rank">优选 #${i+1} · CVI ${c.cvi} · <span class="tag-sm ${b.cls}">${b.text}</span></div>
+      <div class="metrics">
+        <div class="metric">预测通过率<b>${c.estPass}%</b>
+          <div class="pass-bar"><i style="width:${passBar}%;background:${T.c}"></i></div>
+        </div>
+        <div class="metric">平均时效<b style="font-size:13px">${c.days}</b></div>
+        <div class="metric">多次往返<b style="font-size:13px">${c.mev}</b></div>
+      </div>
+      <p class="why">${c.note}</p>
+    </div>`;
+  };
+
+  const compRows=scored.map((c,i)=>{
+    const T=TIER[c.tier];
+    const badge=c.risk?'<span class="tag-sm tag-red">风险</span>':(c.tier==="A"?'<span class="tag-sm tag-green">推荐</span>':'<span class="tag-sm tag-blue">可选</span>');
+    return `<tr>
+      <td>${c.flag} ${c.zh}</td>
+      <td>${c.estPass}%</td>
+      <td>${c.days}</td>
+      <td>${c.mev}</td>
+      <td>${c.tol}</td>
+      <td>${badge}</td>
+    </tr>`;
+  }).join("");
+
+  out.innerHTML = notices +
+    `<div class="simi">
+      <div class="avatars">
+        <div class="avatar">张</div><div class="avatar">李</div><div class="avatar">王</div><div class="avatar">+${sim-3}</div>
+      </div>
+      <div class="simi-text">
+        <b>${sim} 位</b><span>与您画像相似的春秋客户（匹配度 &gt; 85%），以下为基于历史出签数据的综合评估。</span>
+      </div>
+    </div>` +
+    `<h3 style="font-size:16px;margin:6px 0 14px">为你优选的 3 个国家</h3>
+     <div class="grid g3">${top.map(card).join("")}</div>` +
+    `<h3 style="font-size:16px;margin:30px 0 12px">全部国家对比</h3>
+     <div class="card table-wrap" style="padding:12px 16px">
+       <table class="comp">
+         <thead><tr><th>国家</th><th>预测通过率</th><th>平均时效</th><th>多次往返</th><th>材料宽容</th><th>标签</th></tr></thead>
+         <tbody>${compRows}</tbody>
+       </table>
+     </div>` +
+    `<h3 style="font-size:16px;margin:30px 0 12px">建议规避（拒签风险高）</h3>
+     <div class="grid g3">${avoid.map(c=>{const T=TIER[c.tier];return `
+       <div class="card ccard" style="--c:${T.c};--cbg:${T.bg}">
+        <div class="top"><span class="flag">${c.flag}</span>
+          <div><div class="name">${c.zh}</div><div class="en">${c.en}</div></div>
+          <span class="tierbadge">${T.label}</span></div>
+        <p class="why" style="border-top:0;padding-top:0">${c.note}</p></div>`;}).join("")}</div>` +
+    `<div class="actions">
+      <button class="btn" id="dlPlanBtn">📄 下载申请计划书</button>
+      <button class="btn ghost" id="consultBtn">💬 咨询专属顾问</button>
+    </div>`;
+
+  // bind action buttons
+  document.getElementById("dlPlanBtn").onclick=()=>downloadPlan(top,scored);
+  document.getElementById("consultBtn").onclick=()=>contactSales(top[0]);
+  out.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function downloadPlan(top,all){
+  const ageTxt=document.getElementById("age").options[document.getElementById("age").selectedIndex].text;
+  const occTxt=document.getElementById("occupation").options[document.getElementById("occupation").selectedIndex].text;
+  const marTxt=document.getElementById("marital").options[document.getElementById("marital").selectedIndex].text;
+  const genTxt=document.getElementById("gender").options[document.getElementById("gender").selectedIndex].text;
+  const assetTxt=document.getElementById("assets").options[document.getElementById("assets").selectedIndex].text;
+  const incomeTxt=document.getElementById("income").options[document.getElementById("income").selectedIndex].text;
+  const recTxt=document.querySelector('input[name="record"]:checked')?.nextElementSibling?.textContent||"";
+  const purTxt=document.querySelector('input[name="purpose"]:checked')?.nextElementSibling?.textContent||"";
+
+  const topLines=top.map((c,i)=>`【${["首选","备选","第三选择"][i]}】${c.zh}
+- 预测通过率：${c.estPass}%
+- 平均时效：${c.days}
+- 多次往返：${c.mev}
+- 材料宽容：${c.tol}
+- 推荐理由：${c.note}`).join("\n\n");
+
+  const content=`申根签证申请计划书
+
+客户画像：
+- 年龄：${ageTxt}
+- 性别：${genTxt}
+- 职业：${occTxt}
+- 婚姻状况：${marTxt}
+- 资产情况：${assetTxt}
+- 年收入：${incomeTxt}
+- 出境记录：${recTxt}
+- 出行目的：${purTxt}
+
+${topLines}
+
+建议规避：${all.filter(x=>x.risk).map(x=>x.zh).join("、") || "无"}
+
+依据“最长停留国”原则，旅游签最终申请国须由行程中停留时间最长的国家决定；商务签由邀请公司所在国决定；探亲签由邀请人所在国决定，并须取得官方接待证明。
+
+Generated by 春秋旅游 · 申根签证决策导航 v2.0
+`;
+  const blob=new Blob([content],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");a.href=url;a.download="申根签证申请计划书.txt";a.click();
+  URL.revokeObjectURL(url);
+}
+
+function contactSales(best){
+  alert(`您已选择 ${best.zh} 为优先方案！专属顾问将在 10 分钟内与您联系，请保持电话畅通。`);
+}
+
+function resetForm(){
+  document.getElementById("age").value="25";
+  document.getElementById("occupation").value="employee";
+  document.getElementById("marital").value="married";
+  document.getElementById("gender").value="male";
+  document.getElementById("assets").value="10";
+  document.getElementById("income").value="10";
+  document.getElementById("preferred").value="";
+  document.querySelectorAll('input[name="purpose"][value="tour"]').forEach(r=>r.checked=true);
+  document.querySelectorAll('input[name="record"][value="blank"]').forEach(r=>r.checked=true);
+  document.querySelectorAll('input[name="need"][value="safe"]').forEach(r=>r.checked=true);
+  document.querySelectorAll('input[name="departure"][value="normal"]').forEach(r=>r.checked=true);
+  document.querySelectorAll('input[name="flag"]').forEach(r=>r.checked=false);
+  document.getElementById("matchOut").innerHTML="";
+}
+
+document.getElementById("matchBtn").addEventListener("click",renderMatch);
+document.getElementById("resetBtn").addEventListener("click",resetForm);
+
+/* ---------- simulator ---------- */
+const legRows=document.getElementById("legRows");
+const SIM_LIST=ALL29.concat([{zh:"英国",flag:"🇬🇧"},{zh:"爱尔兰",flag:"🇮🇪"}]);
+const optionList=SIM_LIST.map(c=>`<option value="${c.zh}">${c.flag} ${c.zh}</option>`).join("");
+function addLeg(country="",nights=""){
+  const div=document.createElement("div");
+  div.className="legrow";
+  div.innerHTML=`<span class="ix"></span>
+    <select class="cc"><option value="">选择国家…</option>${optionList}</select>
+    <input class="nn" type="number" min="0" step="1" placeholder="天" value="${nights}">
+    <span class="first"><label><input type="radio" name="firstEntry">首入</label></span>
+    <button class="del" title="删除">×</button>`;
+  if(country) div.querySelector(".cc").value=country;
+  div.querySelector(".del").onclick=()=>{div.remove();reindex();};
+  legRows.appendChild(div);reindex();
+}
+function reindex(){[...legRows.children].forEach((r,i)=>r.querySelector(".ix").textContent=i+1);
+  if(legRows.children.length && !legRows.querySelector('input[name="firstEntry"]:checked'))
+    legRows.querySelector('input[name="firstEntry"]').checked=true;}
+document.getElementById("addLeg").onclick=()=>addLeg();
+addLeg("法国",2);addLeg("意大利",5);
+
+document.getElementById("simBtn").onclick=()=>{
+  const rows=[...legRows.children].map((r,i)=>({
+    zh:r.querySelector(".cc").value,
+    n:parseInt(r.querySelector(".nn").value)||0,
+    first:r.querySelector('input[name="firstEntry"]').checked,ix:i
+  })).filter(x=>x.zh&&x.n>0);
+  const out=document.getElementById("stampOut");
+  if(rows.length<1){out.innerHTML=`<div class="notice blue">请至少填写一段有效行程（国家 + 天数）。</div>`;return;}
+
+  const nonSchengen=rows.filter(r=>r.zh==="英国" || r.zh==="爱尔兰");
+  const schengenRows=rows.filter(r=>r.zh!=="英国" && r.zh!=="爱尔兰");
+  let extra="";
+  if(nonSchengen.length>0){
+    extra+=`<br><b>非申根提醒：</b>英国、爱尔兰不属于申根国家，需单独办理英国/爱尔兰签证；本模拟器仅锁定申根区申请国。`;
+  }
+  if(schengenRows.length<1){out.innerHTML=`<div class="notice red">${extra.replace("<br>","")}</div>`;return;}
+
+  const total=schengenRows.reduce((a,r)=>a+r.n,0);
+  const max=Math.max(...schengenRows.map(r=>r.n));
+  const maxRows=schengenRows.filter(r=>r.n===max);
+  let pick,reason;
+  if(maxRows.length===1){pick=maxRows[0];reason=`停留最长（${max} 晚）`;}
+  else{
+    const f=maxRows.find(r=>r.first)||maxRows.sort((a,b)=>a.ix-b.ix)[0];
+    pick=f;reason=`多国停留并列 ${max} 晚 → 取首入国`;
+    extra+=`<br><b>并列提醒：</b>多国停留天数相同存在行程合理性风险，建议调整行程使某国成为唯一最长停留国。`;
+  }
+  const tierData=C.find(c=>c.zh===pick.zh);
+  const st = pick.zh==="法国"||pick.zh==="意大利"||tierData?.tier==="A"||tierData?.tier==="B" ? "var(--ok)" : "var(--alert)";
+  const flag=SIM_LIST.find(c=>c.zh===pick.zh)?.flag||"🇪🇺";
+
+  const hasGreece=schengenRows.some(r=>r.zh==="希腊");
+  const hasOther=schengenRows.some(r=>r.zh!=="希腊");
+  if(pick.zh==="匈牙利") extra+="<br><b>匈牙利注意：</b>送签时机票须已正式出票，请提前确认。";
+  if(pick.zh==="瑞典") extra+="<br><b>瑞典注意：</b>旅游签审核严格，建议准备更强约束力材料。";
+  if(pick.zh==="冰岛") extra+="<br><b>冰岛注意：</b>出签时效不稳定，最长可能等待 45 天，请预留充足时间。";
+  if(hasGreece && hasOther) extra+="<br><b>希腊注意：</b>希腊建议“希腊一地”行程，与其他国家混签可能增加拒签风险。";
+
+  out.innerHTML=`<div class="stamp" style="--st:${st}">
+      <div class="l1">APPLY&nbsp;HERE&nbsp;·&nbsp;申请国已锁定</div>
+      <div class="l2">${flag} ${pick.zh}</div>
+      <div class="l3">${reason} · 全程 ${total} 晚</div>
+    </div>
+    <p style="font-size:13px;color:var(--ink2);margin:16px 0 0">
+      依据“最长停留国”原则，本次行程须向 <b>${pick.zh}</b> 递交申请。
+      若你原计划申请其他国家，请以此为准——否则可能在入境时被海关查验甚至遣返。${extra}</p>`;
+};
+
+/* ---------- docs ---------- */
+const COMMON=[
+ ["有效护照","有效期≥6 个月、至少 2 页空白，含旧护照",1],
+ ["近期白底彩照","2 张，35×45mm，6 个月内",1],
+ ["签证申请表","如实填写并本人签名",1],
+ ["申根旅行医疗保险","覆盖全程，医疗保额≥3 万欧元",1],
+ ["往返机票预订单","确认行程日期，建议预订未出票",0],
+ ["全程酒店预订","覆盖每一晚，须体现最长停留国",1],
+ ["资金证明","近 6 个月银行流水 + 存款证明",1],
+ ["在校证明 / 学生证","学生或未成年人须提供，加盖学校公章",0],
+ ["户口本","全本复印件",0],
+];
+const SPEC={
+ tour:[["行程单","逐日安排，与机酒一致、突出最长停留国",1],
+       ["在职证明 + 营业执照副本","加盖公章，含职位、收入、准假",1],
+       ["婚姻 / 亲属关系证明","随行家庭成员适用",0]],
+ biz:[["商务邀请函","邀请方所在国公司出具，含会议事由、地址、日期、费用承担",1],
+      ["双方公司证明","营业执照、合作关系或往来凭证",1],
+      ["异地会议补充凭证","会议非邀请国时：子公司证明 / 展会场地 / 当地酒店合同",1],
+      ["在职证明","职位、收入与准假证明",1]],
+ visit:[["市政厅官方接待证明","邀请人当地政府开具，一票否决项",1],
+        ["邀请人身份与居留证明","护照／居留卡复印件",1],
+        ["亲属关系证明","结婚证 / 出生证 / 亲属关系公证",1],
+        ["邀请人收入与住房证明","担保接待能力",0]],
+};
+const MINOR=[
+  ["出生医学证明","未成年人须提供，部分领区要求提供复印件",1],
+  ["亲属关系公证认证","户口本 / 出生证 / 亲属关系证明须办理公证，并按目的国要求完成单认证或双认证",1],
+  ["父母不随行委托公证认证","未成年人父母一方或双方不随行，须提供经公证认证的委托书及出行父母同意书",1],
+  ["父母身份证明","父母双方身份证、护照复印件，用于核对亲属关系与监护权",0],
+];
+function renderDocs(){
+  const t=val("dtype");
+  const items=[...COMMON,...SPEC[t]];
+  document.getElementById("docList").innerHTML=items.map(([title,desc,must])=>`
+    <li><input type="checkbox">
+      <div><div class="t">${title}${must?'<span class="must">必备</span>':''}</div>
+      <div class="d">${desc}</div></div></li>`).join("");
+  document.getElementById("minorDocList").innerHTML=MINOR.map(([title,desc,must])=>`
+    <li><input type="checkbox">
+      <div><div class="t">${title}${must?'<span class="must">必备</span>':''}</div>
+      <div class="d">${desc}</div></div></li>`).join("");
+}
+document.querySelectorAll('input[name="dtype"]').forEach(r=>r.addEventListener("change",renderDocs));
+document.getElementById("printBtn").onclick=()=>window.print();
+renderDocs();
+</script>
+</body>
+</html>
